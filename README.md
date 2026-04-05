@@ -19,6 +19,26 @@ Drop it into any WordPress site. No configuration page, no bloat, no jQuery.
 
 ---
 
+## Preview
+
+<p align="center">
+  <img src="assets/screenshots/player-modal.png" alt="Frado Player — modal with audio player, spectrum analyzer, and playlist" width="720">
+</p>
+
+<p align="center">
+  <em>Modal player with spectrum analyzer, playlist, and track metadata</em>
+</p>
+
+<p align="center">
+  <img src="assets/screenshots/player-cards.png" alt="Frado Player — music cards with play buttons" width="720">
+</p>
+
+<p align="center">
+  <em>Music cards with hover play overlay — dark theme integration</em>
+</p>
+
+---
+
 ## Features
 
 - **Multi-codec audio** -- FLAC, Opus, AAC, MP3 with automatic browser negotiation
