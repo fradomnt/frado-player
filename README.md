@@ -328,8 +328,5 @@ Frado Player is free software licensed under the **[GNU General Public License v
 
 ## Built by FRADO
 
-Created by **[FRADO](https://frado.com.br)** -- award-winning designer and developer from Rio de Janeiro, Brazil.
-
-**2x Cannes Gold Lion** | **D&AD Yellow Pencil** | Former Tatil Design
-
+Created by **[FRADO](https://frado.com.br)** -- 
 GitHub: [@fradomnt](https://github.com/fradomnt)
