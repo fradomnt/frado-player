@@ -1,0 +1,738 @@
+/* ════════════════════════════════════════════════════════════════
+   Frado Player v3 — Stylesheet
+   ════════════════════════════════════════════════════════════════
+   All visual values driven by --fp-* design tokens.
+   See docs/design-tokens.css for full specification and rationale.
+   ════════════════════════════════════════════════════════════════ */
+
+
+/* ── 1. Design Tokens (scoped to .frado-player) ─────────────── */
+
+.frado-player {
+
+  /* ─ Color: Background scale ──────────────────────────────────── */
+  --fp-bg:            #0F0F23;
+  --fp-surface:       #1B1B30;
+  --fp-surface-2:     #252A40;
+  --fp-surface-3:     #2E3550;
+
+  /* ─ Color: Accent — Frado Brand Amber ────────────────────────── */
+  --fp-accent:        #CA8A04;
+  --fp-accent-bright: #EAB308;
+  --fp-accent-muted:  #92400E;
+  --fp-accent-glow:   rgba(202, 138, 4, 0.15);
+  --fp-accent-border: rgba(202, 138, 4, 0.35);
+
+  /* ─ Color: Text ──────────────────────────────────────────────── */
+  --fp-text:          #F8FAFC;
+  --fp-text-muted:    #94A3B8;
+  --fp-text-disabled: rgba(248, 250, 252, 0.38);
+
+  /* ─ Color: Semantic ──────────────────────────────────────────── */
+  --fp-error:         #EF4444;
+  --fp-success:       #22C55E;
+  --fp-warning:       #F59E0B;
+
+  /* ─ Color: Borders ───────────────────────────────────────────── */
+  --fp-border:        rgba(255, 255, 255, 0.08);
+  --fp-border-focus:  rgba(202, 138, 4, 0.80);
+
+  /* ─ Typography ───────────────────────────────────────────────── */
+  --fp-font-heading:  'Syne', system-ui, sans-serif;
+  --fp-font-body:     'Manrope', system-ui, sans-serif;
+  --fp-font-mono:     ui-monospace, 'SF Mono', 'Cascadia Code', monospace;
+
+  --fp-text-xs:       0.6875rem;   /* 11px */
+  --fp-text-sm:       0.75rem;     /* 12px */
+  --fp-text-base:     0.875rem;    /* 14px */
+  --fp-text-lg:       1rem;        /* 16px */
+
+  --fp-lh-xs:         1.4;
+  --fp-lh-sm:         1.5;
+  --fp-lh-base:       1.5;
+  --fp-lh-lg:         1.3;
+
+  --fp-fw-normal:     400;
+  --fp-fw-medium:     500;
+  --fp-fw-semibold:   600;
+  --fp-fw-bold:       700;
+
+  --fp-ls-normal:     0em;
+  --fp-ls-wide:       0.03em;
+  --fp-ls-tight:      -0.01em;
+
+  /* ─ Spacing (4pt grid) ───────────────────────────────────────── */
+  --fp-space-1:       4px;
+  --fp-space-2:       8px;
+  --fp-space-3:       12px;
+  --fp-space-4:       16px;
+  --fp-space-5:       20px;
+  --fp-space-6:       24px;
+  --fp-space-8:       32px;
+
+  --fp-space-card-pad:     var(--fp-space-4);
+  --fp-space-row-pad-y:    10px;
+  --fp-space-row-pad-x:    var(--fp-space-2);
+  --fp-space-controls-gap: var(--fp-space-2);
+
+  /* ─ Border Radius ────────────────────────────────────────────── */
+  --fp-radius-sm:     6px;
+  --fp-radius:        12px;
+  --fp-radius-lg:     20px;
+  --fp-radius-pill:   50px;
+  --fp-radius-full:   9999px;
+
+  /* ─ Component Sizes ──────────────────────────────────────────── */
+  --fp-btn-touch:     44px;
+  --fp-btn-play:      44px;
+  --fp-btn-icon:      32px;
+
+  --fp-seekbar-h:       3px;
+  --fp-seekbar-h-hover: 5px;
+
+  --fp-volume-h:        3px;
+  --fp-volume-h-hover:  6px;
+  --fp-volume-w:        80px;
+
+  --fp-spectrum-h:      32px;
+  --fp-playlist-max:    220px;
+
+  /* ─ Motion ───────────────────────────────────────────────────── */
+  --fp-ease-out:      cubic-bezier(0.16, 1, 0.3, 1);
+  --fp-ease-in:       cubic-bezier(0.4, 0, 1, 1);
+  --fp-ease-std:      ease-out;
+
+  --fp-duration-fast:   150ms;
+  --fp-duration-mid:    250ms;
+  --fp-duration-enter:  300ms;
+  --fp-duration-exit:   200ms;
+
+  /* ─ Z-Index Scale ────────────────────────────────────────────── */
+  --fp-z-base:        0;
+  --fp-z-overlay:     10;
+  --fp-z-modal:       100;
+  --fp-z-tooltip:     200;
+}
+
+
+/* ── 2. Keyframes ──────────────────────────────────────────────── */
+
+@keyframes fpBar {
+  0%, 100% { height: var(--fp-space-1); }
+  50%      { height: var(--fp-text-base); }
+}
+
+@keyframes fpPulse {
+  0%, 100% { opacity: 0.4; }
+  50%      { opacity: 1; }
+}
+
+
+/* ── 3. Card root ──────────────────────────────────────────────── */
+
+.frado-player {
+  display: block;
+  background: var(--fp-bg);
+  border-radius: var(--fp-radius);
+  padding: var(--fp-space-card-pad);
+  font-family: var(--fp-font-body);
+  color: var(--fp-text);
+  overflow: hidden;
+}
+
+
+/* ── 4. Header ─────────────────────────────────────────────────── */
+
+.frado-player__header {
+  display: flex;
+  align-items: center;
+  gap: var(--fp-space-2);
+  margin-bottom: var(--fp-space-3);
+}
+
+
+/* ── 5. Spectrum icon animado ──────────────────────────────────── */
+
+.frado-player__spectrum-icon {
+  display: flex;
+  align-items: flex-end;
+  gap: 2px;
+  height: var(--fp-space-4);
+  flex-shrink: 0;
+}
+
+.frado-player__spectrum-icon span {
+  width: 3px;
+  height: var(--fp-space-1);
+  background: var(--fp-accent);
+  border-radius: 2px;
+  display: block;
+}
+
+.frado-player--playing .frado-player__spectrum-icon span:nth-child(1) {
+  animation: fpBar 0.8s var(--fp-ease-std) infinite;
+}
+
+.frado-player--playing .frado-player__spectrum-icon span:nth-child(2) {
+  animation: fpBar 0.8s var(--fp-ease-std) infinite 0.15s;
+}
+
+.frado-player--playing .frado-player__spectrum-icon span:nth-child(3) {
+  animation: fpBar 0.8s var(--fp-ease-std) infinite 0.3s;
+}
+
+.frado-player--playing .frado-player__spectrum-icon span:nth-child(4) {
+  animation: fpBar 0.8s var(--fp-ease-std) infinite 0.45s;
+}
+
+
+/* ── 6. Track title ────────────────────────────────────────────── */
+
+.frado-player__track-title {
+  flex: 1;
+  font-family: var(--fp-font-heading);
+  font-size: var(--fp-text-base);
+  font-weight: var(--fp-fw-semibold);
+  line-height: var(--fp-lh-base);
+  letter-spacing: var(--fp-ls-tight);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+
+/* ── 7. Time display ───────────────────────────────────────────── */
+
+.frado-player__time {
+  display: flex;
+  align-items: center;
+  gap: var(--fp-space-1);
+  font-family: var(--fp-font-body);
+  font-size: var(--fp-text-sm);
+  line-height: var(--fp-lh-sm);
+  color: var(--fp-text-muted);
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.frado-player__time-elapsed,
+.frado-player__time-duration {
+  font-size: var(--fp-text-sm);
+  color: var(--fp-text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+
+/* ── 8. Seekbar ────────────────────────────────────────────────── */
+
+.frado-player__progress {
+  position: relative;
+  width: 100%;
+  height: var(--fp-space-4);
+  cursor: pointer;
+  margin-bottom: var(--fp-space-2);
+  display: flex;
+  align-items: center;
+  touch-action: manipulation;
+}
+
+.frado-player__progress::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: var(--fp-seekbar-h);
+  background: var(--fp-surface);
+  border-radius: var(--fp-radius-pill);
+  overflow: hidden;
+  transition: height var(--fp-duration-fast) var(--fp-ease-std);
+}
+
+.frado-player__progress:hover::before {
+  height: var(--fp-seekbar-h-hover);
+}
+
+.frado-player__progress-fill {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  height: var(--fp-seekbar-h);
+  background: var(--fp-accent);
+  border-radius: var(--fp-radius-pill);
+  pointer-events: none;
+  transition: height var(--fp-duration-fast) var(--fp-ease-std);
+  z-index: var(--fp-z-base);
+}
+
+.frado-player__progress:hover .frado-player__progress-fill {
+  height: var(--fp-seekbar-h-hover);
+}
+
+
+/* ── 9. Controls row ───────────────────────────────────────────── */
+
+.frado-player__controls {
+  display: flex;
+  align-items: center;
+  gap: var(--fp-space-controls-gap);
+  margin-bottom: var(--fp-space-3);
+}
+
+
+/* ── 10. Transport ─────────────────────────────────────────────── */
+
+.frado-player__transport {
+  display: flex;
+  align-items: center;
+  gap: var(--fp-space-1);
+  flex-shrink: 0;
+}
+
+
+/* ── 11. Buttons (base) ────────────────────────────────────────── */
+
+.frado-player__btn {
+  min-width: var(--fp-btn-touch);
+  min-height: var(--fp-btn-touch);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: var(--fp-text-muted);
+  border-radius: var(--fp-radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color      var(--fp-duration-fast) var(--fp-ease-std),
+              background var(--fp-duration-fast) var(--fp-ease-std);
+  padding: 0;
+  line-height: 1;
+}
+
+.frado-player__btn:hover {
+  color: var(--fp-text);
+  background: var(--fp-surface-2);
+}
+
+.frado-player__btn svg {
+  width: 20px;
+  height: 20px;
+  fill: currentColor;
+  flex-shrink: 0;
+}
+
+/* Disabled button state */
+.frado-player__btn[aria-disabled="true"] {
+  color: var(--fp-text-disabled);
+  cursor: default;
+  pointer-events: none;
+}
+
+
+/* ── 12. Play button ───────────────────────────────────────────── */
+
+.frado-player__btn--play {
+  background: var(--fp-accent);
+  color: #000;
+  border-radius: var(--fp-radius-full);
+  width: var(--fp-btn-play);
+  height: var(--fp-btn-play);
+  transition: background var(--fp-duration-fast) var(--fp-ease-std),
+              color      var(--fp-duration-fast) var(--fp-ease-std),
+              transform  var(--fp-duration-mid)  var(--fp-ease-out);
+}
+
+.frado-player__btn--play:hover {
+  background: var(--fp-accent-bright);
+  color: #000;
+  transform: scale(1.08);
+  box-shadow: 0 0 0 6px var(--fp-accent-glow);
+}
+
+
+/* ── 13. Play/Pause icon swap ──────────────────────────────────── */
+
+.frado-player__icon-pause { display: none; }
+.frado-player__icon-play  { display: block; }
+
+.frado-player--playing .frado-player__icon-play  { display: none; }
+.frado-player--playing .frado-player__icon-pause { display: block; }
+
+
+/* ── 14. Volume icon states ────────────────────────────────────── */
+
+.frado-player__icon-vol-high   { display: block; }
+.frado-player__icon-vol-mid    { display: none; }
+.frado-player__icon-vol-low    { display: none; }
+.frado-player__icon-vol-muted  { display: none; }
+
+.frado-player--muted .frado-player__icon-vol-high   { display: none; }
+.frado-player--muted .frado-player__icon-vol-muted  { display: block; }
+
+
+/* ── 15. Spectrum canvas ───────────────────────────────────────── */
+
+.frado-player__spectrum {
+  flex: 1;
+  height: var(--fp-spectrum-h);
+  display: block;
+  cursor: default;
+  border-radius: var(--fp-space-1);
+}
+
+
+/* ── 16. Volume group ──────────────────────────────────────────── */
+
+.frado-player__volume-group {
+  display: flex;
+  align-items: center;
+  gap: var(--fp-space-1);
+  flex-shrink: 0;
+}
+
+.frado-player__volume-track {
+  width: var(--fp-volume-w);
+  height: var(--fp-volume-h);
+  position: relative;
+  cursor: pointer;
+  border-radius: var(--fp-radius-pill);
+  background: rgba(255,255,255,0.12);
+  overflow: visible;
+  transition: height var(--fp-duration-fast) var(--fp-ease-std);
+  touch-action: manipulation;
+}
+
+.frado-player__volume-track:hover,
+.frado-player__volume-track--dragging {
+  height: var(--fp-volume-h-hover);
+}
+
+.frado-player__volume-fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  background: var(--fp-accent, #CA8A04) !important;
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+.frado-player__volume-thumb {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: var(--fp-space-3);
+  height: var(--fp-space-3);
+  border-radius: var(--fp-radius-full);
+  background: var(--fp-accent, #CA8A04) !important;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity var(--fp-duration-fast) var(--fp-ease-std);
+}
+
+.frado-player__volume-track:hover .frado-player__volume-thumb,
+.frado-player__volume-track--dragging .frado-player__volume-thumb {
+  opacity: 1;
+}
+
+
+/* ── 17. Playlist ──────────────────────────────────────────────── */
+
+.frado-player__playlist {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid var(--fp-border);
+  padding-top: var(--fp-space-2);
+  max-height: var(--fp-playlist-max);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: var(--fp-border) transparent;
+}
+
+.frado-player__track {
+  display: flex;
+  align-items: center;
+  gap: var(--fp-space-3);
+  padding: var(--fp-space-row-pad-y) var(--fp-space-row-pad-x);
+  border-radius: var(--fp-radius-sm);
+  cursor: pointer;
+  transition: background var(--fp-duration-fast) var(--fp-ease-std);
+  font-size: var(--fp-text-base);
+}
+
+.frado-player__track:hover {
+  background: var(--fp-surface-2);
+}
+
+.frado-player__track--active,
+.frado-player__track[aria-current="true"] {
+  background: var(--fp-surface);
+  color: var(--fp-accent);
+  border-left: 3px solid var(--fp-accent);
+}
+
+.frado-player__track-num {
+  min-width: 20px;
+  text-align: right;
+  color: var(--fp-text-muted);
+  font-size: var(--fp-text-sm);
+}
+
+.frado-player__track-name {
+  flex: 1;
+  font-family: var(--fp-font-heading);
+  font-weight: var(--fp-fw-semibold);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.frado-player__track-duration {
+  color: var(--fp-text-muted);
+  font-size: var(--fp-text-sm);
+  font-variant-numeric: tabular-nums;
+}
+
+
+/* ── 18. Video mode ────────────────────────────────────────────── */
+
+.frado-player--video .frado-player__video-wrap {
+  position: relative;
+  border-radius: var(--fp-radius) var(--fp-radius) 0 0;
+  overflow: hidden;
+  aspect-ratio: 16 / 9;
+  background: #000;
+}
+
+.frado-player__video-wrap video {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+.frado-player__video-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  background: linear-gradient(transparent 40%, rgba(0, 0, 0, 0.7));
+  opacity: 0;
+  transition: opacity var(--fp-duration-mid) var(--fp-ease-std);
+  padding: var(--fp-space-3);
+}
+
+.frado-player--video:hover .frado-player__video-overlay,
+.frado-player--video.frado-player--paused .frado-player__video-overlay {
+  opacity: 1;
+}
+
+
+/* ── 19. Mobile Bottom Sheet ───────────────────────────────────── */
+
+.frado-player__sheet-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: var(--fp-z-modal);
+  display: none;
+}
+
+.frado-player__sheet-backdrop--open {
+  display: block;
+}
+
+.frado-player__sheet {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: calc(var(--fp-z-modal) + 1);
+  background: var(--fp-bg);
+  border-radius: var(--fp-radius-lg) var(--fp-radius-lg) 0 0;
+  max-height: 85dvh;
+  overflow-y: auto;
+  padding: var(--fp-space-3) var(--fp-space-4);
+  padding-bottom: max(var(--fp-space-4), env(safe-area-inset-bottom));
+  transform: translateY(100%);
+  transition: transform var(--fp-duration-enter) var(--fp-ease-out);
+  display: none;
+}
+
+.frado-player__sheet--open {
+  transform: translateY(0);
+  display: block;
+}
+
+.frado-player__sheet--closing {
+  transition: transform var(--fp-duration-exit) var(--fp-ease-in);
+}
+
+.frado-player__sheet-handle {
+  width: 36px;
+  height: var(--fp-space-1);
+  background: var(--fp-border);
+  border-radius: var(--fp-radius-pill);
+  margin: 0 auto var(--fp-space-4);
+  display: block;
+}
+
+
+/* ── 20. State-based styles (data-fp-state) ────────────────────── */
+
+/* Loading: pulse the spectrum bars */
+.frado-player[data-fp-state="loading"] .frado-player__spectrum-icon span {
+  animation: fpPulse 1.2s var(--fp-ease-std) infinite;
+}
+
+/* Error: tint the player border to signal failure */
+.frado-player[data-fp-state="error"] {
+  box-shadow: inset 0 0 0 2px var(--fp-error);
+}
+
+.frado-player[data-fp-state="error"] .frado-player__track-title {
+  color: var(--fp-error);
+}
+
+/* Playing: spectrum icon bars animate (handled via --playing class above,
+   but also provide data-attribute hook for future JS using _FPState) */
+.frado-player[data-fp-state="playing"] .frado-player__spectrum-icon span:nth-child(1) {
+  animation: fpBar 0.8s var(--fp-ease-std) infinite;
+}
+
+.frado-player[data-fp-state="playing"] .frado-player__spectrum-icon span:nth-child(2) {
+  animation: fpBar 0.8s var(--fp-ease-std) infinite 0.15s;
+}
+
+.frado-player[data-fp-state="playing"] .frado-player__spectrum-icon span:nth-child(3) {
+  animation: fpBar 0.8s var(--fp-ease-std) infinite 0.3s;
+}
+
+.frado-player[data-fp-state="playing"] .frado-player__spectrum-icon span:nth-child(4) {
+  animation: fpBar 0.8s var(--fp-ease-std) infinite 0.45s;
+}
+
+
+/* ── 21. Focus styles (keyboard navigation) ────────────────────── */
+
+.frado-player:focus-visible,
+.frado-player__progress:focus-visible,
+.frado-player__volume-track:focus-visible,
+.frado-player__track:focus-visible {
+  outline: 2px solid var(--fp-border-focus);
+  outline-offset: 2px;
+}
+
+.frado-player__btn:focus-visible {
+  outline: 2px solid var(--fp-border-focus);
+  outline-offset: 2px;
+}
+
+
+/* ── 22. Aria-live region (visually hidden) ────────────────────── */
+
+.frado-player__live-region {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+
+/* ── 23. Responsive mobile ─────────────────────────────────────── */
+
+@media (max-width: 767px) {
+  .frado-player__volume-track {
+    width: 60px;
+  }
+
+  .frado-player__spectrum {
+    min-width: 60px;
+  }
+}
+
+
+/* ── 24. Reduced motion ────────────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  /* Disable spectrum bar animation entirely */
+  .frado-player__spectrum-icon span {
+    animation: none !important;
+  }
+
+  /* Disable loading pulse animation */
+  .frado-player[data-fp-state="loading"] .frado-player__spectrum-icon span {
+    animation: none !important;
+  }
+
+  /* Disable playing state animations via data-attribute */
+  .frado-player[data-fp-state="playing"] .frado-player__spectrum-icon span {
+    animation: none !important;
+  }
+
+  /* Kill all transition durations across the entire player */
+  .frado-player,
+  .frado-player *,
+  .frado-player *::before,
+  .frado-player *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+
+  /* Seekbar: no transition on progress fill height */
+  .frado-player__progress-fill {
+    transition: none !important;
+  }
+
+  /* Progress track: no height transition */
+  .frado-player__progress::before {
+    transition: none !important;
+  }
+
+  /* Volume: no height transition */
+  .frado-player__volume-track {
+    transition: none !important;
+  }
+
+  /* Volume thumb: no opacity transition */
+  .frado-player__volume-thumb {
+    transition: none !important;
+  }
+
+  /* Play button: no scale/background transition */
+  .frado-player__btn--play {
+    transition: none !important;
+  }
+
+  /* Video overlay: no opacity transition */
+  .frado-player__video-overlay {
+    transition: none !important;
+  }
+
+  /* Bottom sheet: no transform transition */
+  .frado-player__sheet {
+    transition: none !important;
+  }
+
+  /* Playlist rows: no background transition */
+  .frado-player__track {
+    transition: none !important;
+  }
+
+  /* Buttons: no color/background transition */
+  .frado-player__btn {
+    transition: none !important;
+  }
+}
+
+
+/* ── 25. Light mode ────────────────────────────────────────────── */
+/* Player is always dark — light mode override removed intentionally */
