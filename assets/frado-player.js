@@ -896,7 +896,8 @@
             if (!this._hasStoredPrefs) {
                 var initVol = parseFloat(this.container.dataset ? this.container.dataset.volume : 0);
                 if (!isNaN(initVol) && initVol > 0) {
-                    this.pct = Math.round(initVol * 100);
+                    // Keep float precision — no Math.round, continuous fader.
+                    this.pct = initVol * 100;
                 }
             }
             this._initialized = true;
@@ -960,7 +961,11 @@
             if (!raw) return;
             var prefs = JSON.parse(raw);
             if (typeof prefs.volume === 'number') {
-                this.pct             = Math.round(Math.max(0, Math.min(1, prefs.volume)) * 100);
+                // Full-precision float — the custom track/thumb slider is
+                // already continuous when dragged; we must not quantize on
+                // reload or every reopen would snap to an integer and the
+                // user would hear a tiny volume step.
+                this.pct             = Math.max(0, Math.min(1, prefs.volume)) * 100;
                 this._hasStoredPrefs = true;
             }
             if (typeof prefs.muted === 'boolean') {
